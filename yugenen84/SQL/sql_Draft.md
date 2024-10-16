@@ -156,20 +156,20 @@ VALUES (
         , POS_MANUAL_DC_SP
         ) 
         VALUES (
-            '20240822'
-            , 'D578'
-            , '1011'
-            , '00049'
-            , 'D578'
+            '20240812'
+            , 'D'
+            , '1001'
+            , '00005'
+            , 'DB73'
             , '99'
-            , '2910822008017'
+            , '2910812008017'
             , NULL
-            , '2024-08-22 10:21:00'
-            , '2024-08-22 10:22:44'
+            , '2024-08-12 10:21:00'
+            , '2024-08-12 10:22:44'
             , '11'
             , '0'
             , '0'
-            , '100000'
+            , '7900'
             , NULL
             , NULL
             , ' '
@@ -177,10 +177,10 @@ VALUES (
             , NULL
             , NULL
             , ' '
-            , NULL
-            , NULL
-            , NULL
-            , NULL
+            , ' '
+            , ' '
+            , ' '
+            , ' '
             , '8'
             , '1'
             , '2'
@@ -206,13 +206,36 @@ VALUES (
             , NULL
             , NULL
             , NULL
-            , '2910822008017'
-            , '2024-08-22 10:22:44'
-            , '2910822008017'
-            , '2024-08-22 10:22:44'
+            , '2910815008017'
+            , '2024-09-15 10:22:44'
+            , '2910815008017'
+            , '2024-09-15 10:22:44'
             , ' '
             , ' '
             , ' ');
 
 
+- 서브쿼리(인라인 뷰를 활용해서)
+   - 4. HEADER 테이블사용하여 취소 거래건의 원거래의 정보를 출력(단, 취소 데이터에 대해서만 출력) - 서브쿼리 사용  
+
+``` sql  
+
+SELECT 
+    ORG_RECEIPT_NO, ORG_POS_NO, ORG_OPER_DT, ORG_BIZPL_CD 
+    FROM TP_TR_HEADER 
+    WHERE RECEIPT_NO IN 
+        (SELECT RECEIPT_NO FROM TP_TR_HEADER WHERE DEAL_SP= '12') 
+    
+    ORDER BY ORG_OPER_DT;  
+
+SELECT 
+    ORIGON_DATA.ORG_RECEIPT_NO, ORIGON_DATA.ORG_POS_NO, ORIGON_DATA.ORG_OPER_DT, ORIGON_DATA.ORG_BIZPL_CD
+FROM TP_TR_HEADER AS ORIGON_DATA, (
+        SELECT
+          POS_NO
+        , RECEIPT_NO
+        , BIZPL_CD
+        FROM TP_TR_HEADER
+        WHERE DEAL_SP = '12') AS CANCEL_DATE ;
+```
 
